@@ -3,7 +3,6 @@ package nl.movie.web.component;
 import nl.movie.service.MoviesRestClient;
 import nl.movie.service.domain.Movie;
 import org.apache.wicket.Component;
-import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.extensions.ajax.markup.html.modal.ModalWindow;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.DataTable;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.HeadersToolbar;
@@ -35,21 +34,13 @@ public class MoviesPanel extends Panel {
 
 
     public MoviesPanel(String id, IModel<String> model) {
+
         super(id, model);
         screeningsPanel = new ScreeningsPanel("content", selectedItem);
-
-        modalWindow = new ModalWindow("screeningsModal");
-        modalWindow.setMaskType(ModalWindow.MaskType.SEMI_TRANSPARENT);
-        modalWindow.setContent(screeningsPanel);
-        modalWindow.setResizable(false);
-        //modalWindow.setCssClassName("modal-dialog-custom");
-        modalWindow.setTitle(new StringResourceModel("screeningsModalTitle"));
+        initializeModalWindow();
         add(modalWindow);
 
-        List<IColumn<Movie, String>> columns = createColumns();
-
-
-        final DataTable<Movie, String> dataTable = new DataTable<>("moviesTable", columns, new ListDataProvider<Movie>() {
+        final DataTable<Movie, String> dataTable = new DataTable<>("moviesTable",  createColumns(), new ListDataProvider<Movie>() {
 
             @Override
             protected List<Movie> getData() {
@@ -63,6 +54,15 @@ public class MoviesPanel extends Panel {
         moviesComponent.setOutputMarkupId(true);
 
         add(moviesComponent);
+    }
+
+    private void initializeModalWindow() {
+        modalWindow = new ModalWindow("screeningsModal");
+        modalWindow.setMaskType(ModalWindow.MaskType.SEMI_TRANSPARENT);
+        modalWindow.setContent(screeningsPanel);
+        modalWindow.setResizable(false);
+        //modalWindow.setCssClassName("modal-dialog-custom");
+        modalWindow.setTitle(new StringResourceModel("screeningsModalTitle"));
     }
 
     private List<IColumn<Movie, String>> createColumns() {
@@ -86,22 +86,7 @@ public class MoviesPanel extends Panel {
             @Override
             public void populateItem(final Item item, final String componentId, final IModel rowModel) {
 
-                item.add(new LabeledAjaxLink(componentId, Model.of("screeningsLink")) {
-                    @Override
-                    public void onClick(final AjaxRequestTarget target) {
-                        selectedItem.setObject((Movie) rowModel.getObject());
-                        modalWindow.show(target);
-                    }
-
-
-                });
-                /*item.add(new AjaxLink<String>(componentId, new StringResourceModel("screeningsLink")) {
-                    @Override
-                    public void onClick(final AjaxRequestTarget target) {
-                        selectedItem.setObject((Movie) rowModel.getObject());
-                        modalWindow.show(target);
-                    }
-                });*/
+             item.add(new ScreeningsAjaxLinkPanel(componentId, selectedItem, modalWindow, rowModel));
             }
         };
     }

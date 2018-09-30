@@ -2,6 +2,7 @@ package nl.movie.web.component;
 
 import nl.movie.service.domain.Movie;
 import nl.movie.service.domain.Screening;
+import nl.movie.service.util.MoviesDateUtil;
 import org.apache.wicket.Component;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
@@ -41,8 +42,8 @@ public class ScreeningsPanel extends GenericPanel<Movie> {
                 final Screening screening = item.getModelObject();
                 item.add(new Label("screeningCity", screening.getCinema().getCity()));
                 item.add(new Label("screeningCinema", screening.getCinema().getName()));
-                item.add(new Label("screeningStartDate", screening.getStartDateTime().substring(0,9)));
-                item.add(new Label("screeningStartTime", screening.getStartDateTime().substring(11)));
+                item.add(new Label("screeningStartDate", MoviesDateUtil.extractDate( screening.getStartDateTime())));
+                item.add(new Label("screeningStartTime", MoviesDateUtil.extractTime( screening.getStartDateTime())));
             }
         });
 
