@@ -10,7 +10,7 @@ public class MoviesDateUtil {
 
     private static final String YYYY_MM_DD_T_HH_MM_SS = "yyyy-MM-dd'T'HH:mm:ss";
     private static final String HH_MM_SS = "HH:mm:ss";
-    private static final String YYYY_MM_DD = "yyyy-MM-dd";
+    private static final String DD_MM_YYYY = "dd-MM-yyyy";
 
 
     private MoviesDateUtil() {
@@ -19,7 +19,7 @@ public class MoviesDateUtil {
     public static String extractDate(final String dateTimeString) {
         try {
             final Date date = new SimpleDateFormat(YYYY_MM_DD_T_HH_MM_SS).parse(dateTimeString);
-            return new SimpleDateFormat(YYYY_MM_DD).format(date);
+            return new SimpleDateFormat(DD_MM_YYYY).format(date);
         } catch (final Exception e) {
             return "";
         }
