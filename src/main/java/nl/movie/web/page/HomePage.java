@@ -1,10 +1,13 @@
 package nl.movie.web.page;
 
 import nl.movie.service.UserService;
+import nl.movie.web.component.HeaderPanel;
 import nl.movie.web.component.MoviesPanel;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.markup.html.WebPage;
+import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.StringResourceModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
@@ -19,6 +22,8 @@ public class HomePage extends WebPage {
 
     public HomePage(final PageParameters parameters) {
         super(parameters);
+
+        add(new HeaderPanel("header-panel"));
 
         final MoviesPanel moviesPanel = new MoviesPanel("movies-panel", () -> {
             return "amsterdam";

@@ -66,3 +66,9 @@ h3 {
 	font-size:24pt;
 	color:#092E67;
 }
+
+.icon {
+	height: 7%;
+	width: 7%;
+	min-width: 30px;
+}
