@@ -85,7 +85,6 @@ public class MoviesPanel extends Panel {
 
             @Override
             public void populateItem(final Item item, final String componentId, final IModel rowModel) {
-
              item.add(new ScreeningsAjaxLinkPanel(componentId, selectedItem, modalWindow, rowModel));
             }
         };
