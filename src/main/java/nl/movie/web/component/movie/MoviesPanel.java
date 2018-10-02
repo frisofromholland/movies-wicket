@@ -1,14 +1,19 @@
-package nl.movie.web.component;
+package nl.movie.web.component.movie;
 
 import nl.movie.service.MoviesRestClient;
 import nl.movie.service.domain.Movie;
+import nl.movie.web.component.screening.ScreeningsAjaxLinkPanel;
+import nl.movie.web.component.screening.ScreeningsPanel;
 import org.apache.wicket.Component;
 import org.apache.wicket.extensions.ajax.markup.html.modal.ModalWindow;
+import org.apache.wicket.extensions.markup.html.repeater.data.grid.ICellPopulator;
+import org.apache.wicket.extensions.markup.html.repeater.data.table.AbstractColumn;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.DataTable;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.HeadersToolbar;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.IColumn;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.PropertyColumn;
 import org.apache.wicket.markup.html.WebMarkupContainer;
+import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.markup.repeater.data.ListDataProvider;
@@ -40,7 +45,7 @@ public class MoviesPanel extends Panel {
         initializeModalWindow();
         add(modalWindow);
 
-        final DataTable<Movie, String> dataTable = new DataTable<>("moviesTable",  createColumns(), new ListDataProvider<Movie>() {
+        final DataTable<Movie, String> dataTable = new DataTable<>("moviesTable", createColumns(), new ListDataProvider<Movie>() {
 
             @Override
             protected List<Movie> getData() {
@@ -70,22 +75,51 @@ public class MoviesPanel extends Panel {
         List<IColumn<Movie, String>> columns = new ArrayList<>();
 
         columns.add(new PropertyColumn<>(new StringResourceModel("title"), "title"));
-        columns.add(new PropertyColumn<>(new StringResourceModel("description"), "description"));
-        //columns.add(new PropertyColumn<>(new StringResourceModel("duration"), "duration"));
-        //columns.add(new PropertyColumn<>(new StringResourceModel("year"), "year"));
-        columns.add(new PropertyColumn<>(new StringResourceModel("trailerLink"), "trailerLink"));
+        columns.add(createDescriptionColumn());
+        columns.add(createTralerLinkColumn());
+        columns.add(createScreeningsTodayColumn());
         columns.add(createDetailsLinkColumn());
 
         return columns;
     }
 
+    private AbstractColumn<Movie, String> createDescriptionColumn() {
+        return new AbstractColumn<Movie, String>(new StringResourceModel("description")) {
+
+            @Override
+            public void populateItem(Item<ICellPopulator<Movie>> item, String componentId, IModel<Movie> rowModel) {
+                item.add(new Label(componentId, new Model<>(rowModel.getObject().getMovieDetails().getPlot())));
+            }
+        };
+    }
+
+    private AbstractColumn<Movie, String> createTralerLinkColumn() {
+        return new AbstractColumn<Movie, String>(new StringResourceModel("trailerLink")) {
+
+            @Override
+            public void populateItem(Item<ICellPopulator<Movie>> item, String componentId, IModel<Movie> rowModel) {
+                item.add(new Label(componentId, new Model<>(rowModel.getObject().getMovieDetails().getPoster())));
+            }
+        };
+    }
+
+    private AbstractColumn<Movie, String> createScreeningsTodayColumn() {
+        return new AbstractColumn<Movie, String>(new StringResourceModel("screeningsToday")) {
+
+            @Override
+            public void populateItem(Item<ICellPopulator<Movie>> item, String componentId, IModel<Movie> rowModel) {
+                item.add(new Label(componentId, new Model<>(rowModel.getObject().screeningsToday())));
+            }
+        };
+    }
+
 
     protected final PropertyColumn<Movie, String> createDetailsLinkColumn() {
-        return new PropertyColumn<Movie, String>(new StringResourceModel("screeningsLink"), "screeningsLink") {
+        return new PropertyColumn<Movie, String>(new Model<>(""), "screeningsLink") {
 
             @Override
             public void populateItem(final Item item, final String componentId, final IModel rowModel) {
-             item.add(new ScreeningsAjaxLinkPanel(componentId, selectedItem, modalWindow, rowModel));
+                item.add(new ScreeningsAjaxLinkPanel(componentId, selectedItem, modalWindow, rowModel));
             }
         };
     }

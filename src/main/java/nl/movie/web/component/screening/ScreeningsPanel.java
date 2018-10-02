@@ -1,4 +1,4 @@
-package nl.movie.web.component;
+package nl.movie.web.component.screening;
 
 import nl.movie.service.domain.Movie;
 import nl.movie.service.domain.Screening;
@@ -42,8 +42,8 @@ public class ScreeningsPanel extends GenericPanel<Movie> {
                 final Screening screening = item.getModelObject();
                 item.add(new Label("screeningCity", screening.getCinema().getCity()));
                 item.add(new Label("screeningCinema", screening.getCinema().getName()));
-                item.add(new Label("screeningStartDate", MoviesDateUtil.extractDate( screening.getStartDateTime())));
-                item.add(new Label("screeningStartTime", MoviesDateUtil.extractTime( screening.getStartDateTime())));
+                item.add(new Label("screeningStartDate", MoviesDateUtil.extractDate(screening.getStartDateTime())));
+                item.add(new Label("screeningStartTime", MoviesDateUtil.extractTime(screening.getStartDateTime())));
             }
         });
 

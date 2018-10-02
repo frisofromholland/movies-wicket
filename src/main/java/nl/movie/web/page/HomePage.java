@@ -1,7 +1,7 @@
 package nl.movie.web.page;
 
 import nl.movie.service.UserService;
-import nl.movie.web.component.MoviesPanel;
+import nl.movie.web.component.movie.MoviesPanel;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.markup.html.WebPage;

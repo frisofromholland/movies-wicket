@@ -2,8 +2,11 @@ package nl.movie.service.domain;
 
 import lombok.Getter;
 import lombok.Setter;
+import nl.movie.service.util.MoviesDateUtil;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -16,10 +19,20 @@ public class Movie implements Serializable {
     private static final long serialVersionUID = -4039587343866359063L;
 
     private String title;
-    private String description;
-    private int duration;
-    private int year;
-    private String trailerLink;
-    private List<Screening> screenings;
+    private MovieDetails movieDetails;
+    private List<Screening> screenings = new ArrayList<>();
+
+
+    public String screeningsToday() {
+
+        final String result = screenings
+                .stream()
+                .filter(s -> MoviesDateUtil.sameDay(new Date(), s.getStartDateTime()))
+                .map(s -> MoviesDateUtil.extractTime(s.getStartDateTime()) + " (" + s.getCinema().getName() + "),\n")
+                .reduce("", String::concat);
+
+        return result;
+
+    }
 
 }

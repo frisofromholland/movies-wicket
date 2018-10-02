@@ -27,7 +27,7 @@ public class MoviesRestClientImpl implements MoviesRestClient {
 
 
     @Override
-    public List<Movie> findByCity(String city) {
+    public List<Movie> findByCity(final String city) {
 
         List<Movie> movies = new ArrayList<>();
 
