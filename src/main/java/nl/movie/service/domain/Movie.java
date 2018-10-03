@@ -25,14 +25,18 @@ public class Movie implements Serializable {
 
     public String screeningsToday() {
 
-        final String result = screenings
+        String result = screenings
                 .stream()
                 .filter(s -> MoviesDateUtil.sameDay(new Date(), s.getStartDateTime()))
                 .map(s -> MoviesDateUtil.extractTime(s.getStartDateTime()) + " (" + s.getCinema().getName() + "),\n")
                 .reduce("", String::concat);
 
-        return result;
+        final int index = result.lastIndexOf(',');
+        if (index > 0) {
+            result = result.substring(0, index);
+        }
 
+        return result;
     }
 
 }

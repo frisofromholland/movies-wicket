@@ -72,3 +72,9 @@ h3 {
 	width: 7%;
 	min-width: 30px;
 }
+
+.poster {
+	height: 25%;
+	width: 25%;
+	min-width: 80px;
+}

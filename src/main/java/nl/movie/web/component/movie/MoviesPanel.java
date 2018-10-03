@@ -2,8 +2,10 @@ package nl.movie.web.component.movie;
 
 import nl.movie.service.MoviesRestClient;
 import nl.movie.service.domain.Movie;
+import nl.movie.web.component.image.ExternalSourceImage;
 import nl.movie.web.component.screening.ScreeningsAjaxLinkPanel;
 import nl.movie.web.component.screening.ScreeningsPanel;
+import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.extensions.ajax.markup.html.modal.ModalWindow;
 import org.apache.wicket.extensions.markup.html.repeater.data.grid.ICellPopulator;
@@ -74,13 +76,23 @@ public class MoviesPanel extends Panel {
 
         List<IColumn<Movie, String>> columns = new ArrayList<>();
 
-        columns.add(new PropertyColumn<>(new StringResourceModel("title"), "title"));
+        columns.add(createTitleColumn());
+        columns.add(createPosterColumn());
         columns.add(createDescriptionColumn());
-        columns.add(createTralerLinkColumn());
         columns.add(createScreeningsTodayColumn());
         columns.add(createDetailsLinkColumn());
 
         return columns;
+    }
+
+    private PropertyColumn<Movie, String> createTitleColumn() {
+        return new PropertyColumn<Movie, String>(new StringResourceModel("title"), "title") {
+            @Override
+            public void populateItem(Item item, String componentId, IModel rowModel) {
+                super.populateItem(item, componentId, rowModel);
+                item.add(new AttributeModifier("class", "col-md-1"));
+            }
+        };
     }
 
     private AbstractColumn<Movie, String> createDescriptionColumn() {
@@ -89,18 +101,21 @@ public class MoviesPanel extends Panel {
             @Override
             public void populateItem(Item<ICellPopulator<Movie>> item, String componentId, IModel<Movie> rowModel) {
                 item.add(new Label(componentId, new Model<>(rowModel.getObject().getMovieDetails().getPlot())));
+                item.add(new AttributeModifier("class", "col-md-3"));
             }
         };
     }
 
-    private AbstractColumn<Movie, String> createTralerLinkColumn() {
-        return new AbstractColumn<Movie, String>(new StringResourceModel("trailerLink")) {
+    private AbstractColumn<Movie, String> createPosterColumn() {
+        return new AbstractColumn<Movie, String>(new StringResourceModel("poster")) {
 
             @Override
             public void populateItem(Item<ICellPopulator<Movie>> item, String componentId, IModel<Movie> rowModel) {
-                item.add(new Label(componentId, new Model<>(rowModel.getObject().getMovieDetails().getPoster())));
+                item.add(new ExternalSourceImage(componentId, new Model<>(rowModel.getObject().getMovieDetails().getPoster())));
+                item.add(new AttributeModifier("class", "col-md-1"));
             }
         };
+
     }
 
     private AbstractColumn<Movie, String> createScreeningsTodayColumn() {
@@ -109,8 +124,10 @@ public class MoviesPanel extends Panel {
             @Override
             public void populateItem(Item<ICellPopulator<Movie>> item, String componentId, IModel<Movie> rowModel) {
                 item.add(new Label(componentId, new Model<>(rowModel.getObject().screeningsToday())));
+                item.add(new AttributeModifier("class", "col-md-2"));
             }
         };
+
     }
 
 
@@ -120,8 +137,10 @@ public class MoviesPanel extends Panel {
             @Override
             public void populateItem(final Item item, final String componentId, final IModel rowModel) {
                 item.add(new ScreeningsAjaxLinkPanel(componentId, selectedItem, modalWindow, rowModel));
+                item.add(new AttributeModifier("class", "col-md-1"));
             }
         };
+
     }
 
 }

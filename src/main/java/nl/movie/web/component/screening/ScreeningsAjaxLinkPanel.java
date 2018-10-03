@@ -26,7 +26,6 @@ public class ScreeningsAjaxLinkPanel extends Panel {
         };
 
         final Image screeningIcon = new Image("screening-icon", new ContextRelativeResourceReference("images/screening-icon.png"));
-        screeningIcon.setXValues();
         ajaxLink.add(screeningIcon);
         add(ajaxLink);
 

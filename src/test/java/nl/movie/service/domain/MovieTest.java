@@ -33,6 +33,7 @@ public class MovieTest {
         Assert.assertThat(screeningsToday.contains("(cinema 1)"), Is.is(equalTo(true)));
         Assert.assertThat(screeningsToday.contains("(cinema 2)"), Is.is(equalTo(true)));
         Assert.assertThat(screeningsToday.contains("(cinema 3)"), Is.is(equalTo(false)));
+        Assert.assertThat(screeningsToday.lastIndexOf(',') < (screeningsToday.length() - ",\n".length()), Is.is(true));
     }
 
     private Screening createScreening(final String cinemaName, final Date date) {
